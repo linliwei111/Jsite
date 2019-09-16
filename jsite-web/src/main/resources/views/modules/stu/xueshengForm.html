@@ -1,0 +1,143 @@
+<% layout('/layout/default.html', {title: '学生详情', libs: ['validate', 'icheck']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-pencil-square-o"></i> ${xuesheng.isNewRecord?'新增学生':'编辑学生'}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${xuesheng}" action="${ctx}/stu/xuesheng/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<#form:hidden path="id"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 课程类别：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="kechengleibie" name="label" data="getDictList:kechengleibie" class="form-control  " />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 课程编号：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="kechengbianhao"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 课程名称：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="kechengmingcheng"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 考试考查：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="kaoshikaocha"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 本专业主要课程：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="benzhuanyezhuyaokecheng"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 辅修本专业课程：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="fuxiubenzhuanyekecheng"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 学分：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="xuefen"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 学时：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="xueshi"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 备注信息：
+							</label>
+							<div class="col-sm-8">
+								<#form:textarea path="remarks" rows="4"  maxlength="255" class="form-control input-xxlarge "/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('stu:xuesheng:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> 保 存</button>
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="window.parent.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+
+<script type="text/javascript">
+	$("#inputForm").validate({
+		submitHandler: function(form){
+			js.ajaxSubmitForm($(form), function(data){
+				js.showMessage(data.message);
+				if(data.result == 'true'){
+					window.parent.closeCurrentTabPage(window.parent.refreshTab);
+				}
+			});
+	    }
+	});
+</script>

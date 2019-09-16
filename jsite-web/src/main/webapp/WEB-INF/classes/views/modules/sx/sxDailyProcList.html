@@ -1,0 +1,75 @@
+<% layout('/layout/default.html', {title: '实训流程', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-cubes"></i> 实训流程
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnRefreshTree" title="刷新"><i class="fa fa-refresh"></i> 刷新</a>
+				<a href="#" class="btn btn-default" id="btnExpandTreeNode" title="展开一级"><i class="fa fa-angle-double-down"></i> 展开</a>
+				<a href="#" class="btn btn-default" id="btnCollapseTreeNode" title="折叠全部"><i class="fa fa-angle-double-up"></i> 折叠</a>
+				<% if(hasPermi('sx:sxDailyProc:edit')){ %>
+					<a href="/sx/sxDailyProc/form" class="btn btn-default btnTool" title="添加根实训流程"><i class="fa fa-plus"></i> 添加根实训流程</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<form id="searchForm" action="${ctx}/sx/sxDailyProc/listData" method="post" class="form-inline hide" >
+				<button type="submit" class="btn btn-primary btn-sm">查询</button>
+				<button type="reset" class="btn btn-default btn-sm">重置</button>
+			</form>
+			<table id="dataGrid"></table>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+//初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'名称', name:'name', index:'a.name', width:200, align:"left"},
+		{header:'链接', name:'href', index:'a.href', width:50, align:"center"},
+		{header:'排序', name:'sort', width:50, align:"center", formatter: function(val, obj, row, act){
+				var html = [];
+			<% if(hasPermi('sx:sxDailyJob:edit')){ %>
+					html.push('<input type="hidden" name="ids" value="'+row.id+'"/>');
+					html.push('<input name="sorts" type="text" value="'+row.sort+'" style="width:50px;height:19px;margin:0;padding:0;text-align:center;border:1px solid #ddd">');
+				<% }else{ %>
+					html.push(row.sort);
+				<% } %>
+				return html.join('');
+			}},
+		{header:'可见', name:'isShow', width:50, fixed:true, align:"center", formatter: function(val, obj, row, act){
+				return val=="1"?"显示":"隐藏";
+			}},
+		{header:'参与角色', name:'roleName', index:'a.role_name', width:90, align:"center"},
+		{header:'工作内容', name:'job', index:'a.job', width:90, align:"left"},
+		{header:'参考文件', name:'refDoc', index:'a.ref_doc', width:90, align:"center"},
+		{header:'参与时间', name:'joinTime', index:'a.join_time', width:90, align:"center"},
+		{header:'操作', name:'actions', width:100, sortable:false, title:false, align:"center",formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('sx:sxDailyProc:edit')){ %>
+				actions.push('<a href="/sx/sxDailyProc/form?id='+row.id+'" class="btnList" title="修改实训流程"><i class="fa fa-pencil"></i></a>');
+				actions.push('<a href="${ctx}/sx/sxDailyProc/delete?id='+row.id+'" class="btnList" title="删除实训流程" data-confirm="要删除该实训流程及所有子实训流程吗？"><i class="fa fa-trash-o"></i></a>');
+				actions.push('<a href="/sx/sxDailyProc/form?parentId='+row.id+'" class="btnList" title="添加下级实训流程"><i class="fa fa-plus-square"></i></a>');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	treeGrid: true,
+	defaultExpandLevel: 0,
+	expandNodeClearPostData: 'name',
+	treeIcons : {
+		plus: "ui-icon-circlesmall-plus",
+		minus: "ui-icon-circlesmall-minus",
+		leaf : "ui-icon-document"
+	},
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+
+	}
+});
+
+</script>

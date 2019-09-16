@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.ZhoubaoDao">
+    
+	<sql id="zhoubaoColumns">
+				a.id AS "id",
+		a.bianhao AS "bianhao",
+		a.biangengmiaoshu AS "biangengmiaoshu",
+		a.biangengyuanyin AS "biangengyuanyin",
+		a.hetongcankao AS "hetongcankao",
+		a.biangengleixing AS "biangengleixing",
+		a.youxianshunxu AS "youxianshunxu",
+		a.zhuangtai AS "zhuangtai",
+		a.tichufang AS "tichufang",
+		a.tichuren AS "tichuren",
+		a.tichuriqi AS "tichuriqi",
+		a.yingxiangdengji AS "yingxiangdengji",
+		a.suoxuziyuan AS "suoxuziyuan",
+		a.suoxurentian AS "suoxurentian",
+		a.suoxuqitachengben AS "suoxuqitachengben",
+		a.zerenren AS "zerenren",
+		a.yujiwanchengriqi AS "yujiwanchengriqi",
+		a.gongsishenpiyijianjiriqi AS "gongsishenpiyijianjiriqi",
+		a.pizhunzhixingriqi AS "pizhunzhixingriqi",
+		a.kehuyijianjiriqi AS "kehuyijianjiriqi",
+		a.biangengwenjianqianshuriqi AS "biangengwenjianqianshuriqi",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="zhoubaoJoins">
+	</sql>
+    
+	<select id="get" resultType="Zhoubao">
+		SELECT 
+			<include refid="zhoubaoColumns"/>
+		FROM zhoubao a
+		<include refid="zhoubaoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Zhoubao">
+		SELECT 
+			<include refid="zhoubaoColumns"/>
+		FROM zhoubao a
+		<include refid="zhoubaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Zhoubao">
+		SELECT 
+			<include refid="zhoubaoColumns"/>
+		FROM zhoubao a
+		<include refid="zhoubaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO zhoubao(
+			id,
+			bianhao,
+			biangengmiaoshu,
+			biangengyuanyin,
+			hetongcankao,
+			biangengleixing,
+			youxianshunxu,
+			zhuangtai,
+			tichufang,
+			tichuren,
+			tichuriqi,
+			yingxiangdengji,
+			suoxuziyuan,
+			suoxurentian,
+			suoxuqitachengben,
+			zerenren,
+			yujiwanchengriqi,
+			gongsishenpiyijianjiriqi,
+			pizhunzhixingriqi,
+			kehuyijianjiriqi,
+			biangengwenjianqianshuriqi,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{bianhao},
+			#{biangengmiaoshu},
+			#{biangengyuanyin},
+			#{hetongcankao},
+			#{biangengleixing},
+			#{youxianshunxu},
+			#{zhuangtai},
+			#{tichufang},
+			#{tichuren},
+			#{tichuriqi},
+			#{yingxiangdengji},
+			#{suoxuziyuan},
+			#{suoxurentian},
+			#{suoxuqitachengben},
+			#{zerenren},
+			#{yujiwanchengriqi},
+			#{gongsishenpiyijianjiriqi},
+			#{pizhunzhixingriqi},
+			#{kehuyijianjiriqi},
+			#{biangengwenjianqianshuriqi},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE zhoubao SET 	
+			bianhao = #{bianhao},
+			biangengmiaoshu = #{biangengmiaoshu},
+			biangengyuanyin = #{biangengyuanyin},
+			hetongcankao = #{hetongcankao},
+			biangengleixing = #{biangengleixing},
+			youxianshunxu = #{youxianshunxu},
+			zhuangtai = #{zhuangtai},
+			tichufang = #{tichufang},
+			tichuren = #{tichuren},
+			tichuriqi = #{tichuriqi},
+			yingxiangdengji = #{yingxiangdengji},
+			suoxuziyuan = #{suoxuziyuan},
+			suoxurentian = #{suoxurentian},
+			suoxuqitachengben = #{suoxuqitachengben},
+			zerenren = #{zerenren},
+			yujiwanchengriqi = #{yujiwanchengriqi},
+			gongsishenpiyijianjiriqi = #{gongsishenpiyijianjiriqi},
+			pizhunzhixingriqi = #{pizhunzhixingriqi},
+			kehuyijianjiriqi = #{kehuyijianjiriqi},
+			biangengwenjianqianshuriqi = #{biangengwenjianqianshuriqi},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE zhoubao SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

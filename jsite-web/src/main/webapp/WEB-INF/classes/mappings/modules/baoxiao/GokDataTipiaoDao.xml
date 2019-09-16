@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.baoxiao.dao.GokDataTipiaoDao">
+    
+	<sql id="gokDataTipiaoColumns">
+				a.id AS "id",
+		a.baoxiaoshijian AS "baoxiaoshijian",
+		a.baoxiaoren AS "baoxiaoren",
+		a.tipiaoleibie AS "tipiaoleibie",
+		a.tipiaojine AS "tipiaojine",
+		a.baoxiaoleibie AS "baoxiaoleibie",
+		a.baoxiaojine AS "baoxiaojine",
+		a.fudaipingzhengshu AS "fudaipingzhengshu",
+		a.beizhu AS "beizhu",
+		a.office_id AS "office.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o10.name AS "office.name"
+	</sql>
+	
+	<sql id="gokDataTipiaoJoins">
+		LEFT JOIN sys_office o10 ON o10.id = a.office_id
+		LEFT JOIN sys_user u1 ON u1.id = a.create_by
+	</sql>
+    
+	<select id="get" resultType="GokDataTipiao">
+		SELECT 
+			<include refid="gokDataTipiaoColumns"/>
+		FROM gok_data_tipiao a
+		<include refid="gokDataTipiaoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokDataTipiao">
+		SELECT 
+			<include refid="gokDataTipiaoColumns"/>
+		FROM gok_data_tipiao a
+		<include refid="gokDataTipiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="baoxiaoshijian != null and baoxiaoshijian != ''">
+				AND a.baoxiaoshijian = #{baoxiaoshijian}
+			</if>
+			<if test="baoxiaoren != null and baoxiaoren != ''">
+				AND a.baoxiaoren = #{baoxiaoren}
+			</if>
+			<if test="tipiaoleibie != null and tipiaoleibie != ''">
+				AND a.tipiaoleibie = #{tipiaoleibie}
+			</if>
+			<if test="tipiaojine != null and tipiaojine != ''">
+				AND a.tipiaojine = #{tipiaojine}
+			</if>
+			<if test="baoxiaoleibie != null and baoxiaoleibie != ''">
+				AND a.baoxiaoleibie = #{baoxiaoleibie}
+			</if>
+			<if test="baoxiaojine != null and baoxiaojine != ''">
+				AND a.baoxiaojine = #{baoxiaojine}
+			</if>
+			<!-- 数据范围过滤 -->
+			${sqlMap.dsf}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokDataTipiao">
+		SELECT 
+			<include refid="gokDataTipiaoColumns"/>
+		FROM gok_data_tipiao a
+		<include refid="gokDataTipiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_data_tipiao(
+			id,
+			baoxiaoshijian,
+			baoxiaoren,
+			tipiaoleibie,
+			tipiaojine,
+			baoxiaoleibie,
+			baoxiaojine,
+			fudaipingzhengshu,
+			beizhu,
+			office_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{baoxiaoshijian},
+			#{baoxiaoren},
+			#{tipiaoleibie},
+			#{tipiaojine},
+			#{baoxiaoleibie},
+			#{baoxiaojine},
+			#{fudaipingzhengshu},
+			#{beizhu},
+			#{office.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_data_tipiao SET 	
+			baoxiaoshijian = #{baoxiaoshijian},
+			baoxiaoren = #{baoxiaoren},
+			tipiaoleibie = #{tipiaoleibie},
+			tipiaojine = #{tipiaojine},
+			baoxiaoleibie = #{baoxiaoleibie},
+			baoxiaojine = #{baoxiaojine},
+			fudaipingzhengshu = #{fudaipingzhengshu},
+			beizhu = #{beizhu},
+			office_id = #{office.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_data_tipiao SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

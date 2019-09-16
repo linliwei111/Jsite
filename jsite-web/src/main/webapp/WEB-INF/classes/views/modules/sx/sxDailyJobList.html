@@ -1,0 +1,100 @@
+<% layout('/layout/default.html', {title: '实训攻略', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-cubes" title="团队项目，组长带头完成，全部完成加10%分值，一个未完成扣除10%，两个未完成扣除20%"></i> 实训攻略
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnRefreshTree" title="刷新"><i class="fa fa-refresh"></i> 刷新</a>
+				<a href="#" class="btn btn-default" id="btnExpandTreeNode" title="展开一级"><i class="fa fa-angle-double-down"></i> 展开</a>
+				<a href="#" class="btn btn-default" id="btnCollapseTreeNode" title="折叠全部"><i class="fa fa-angle-double-up"></i> 折叠</a>
+				<% if(hasPermi('sx:sxDailyJob:edit')){ %>
+					<a href="/sx/sxDailyJob/form" class="btn btn-default btnTool" title="添加实训攻略"><i class="fa fa-plus"></i> 添加根实训攻略</a>
+					<a href="#" class="btn btn-default" id="btnUpdateSort" title="排序&分值"><i class="fa fa-sort-amount-asc"></i> 保存</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<form id="searchForm" action="${ctx}/sx/sxDailyJob/listData" method="post" class="form-inline hide" >
+				<button type="submit" class="btn btn-primary btn-sm">查询</button>
+				<button type="reset" class="btn btn-default btn-sm">重置</button>
+			</form>
+			<form id="dataGridForm" action="${ctx}/sx/sxDailyJob/updateSort" method="post" class="form-inline" >
+				<table id="dataGrid"></table>
+			</form>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+//初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+
+		{header:'名称', name:'name', index:'a.name', width:90, align:"left"},
+
+		{header:'内容', name:'remarks', index:'a.remarks', width:90, align:"left"},
+		{header:'链接', name:'href', index:'a.href', width:30, align:"center"},
+		{header:'类型', name:'permission', index:'a.permission', width:60, align:"left"},
+
+		{header:'分值', name:'target', width:50, align:"center", formatter: function(val, obj, row, act){
+				var html = [];
+			<% if(hasPermi('sx:sxDailyJob:edit')){ %>
+					html.push('<input name="targets" type="text" value="'+row.target+'" style="width:50px;height:19px;margin:0;padding:0;text-align:center;border:1px solid #ddd">');
+				<% }else{ %>
+					html.push(row.target);
+				<% } %>
+				return html.join('');
+			}},
+		{header:'排序', name:'sort', width:50, align:"center", formatter: function(val, obj, row, act){
+				var html = [];
+			<% if(hasPermi('sx:sxDailyJob:edit')){ %>
+					html.push('<input type="hidden" name="ids" value="'+row.id+'"/>');
+					html.push('<input name="sorts" type="text" value="'+row.sort+'" style="width:50px;height:19px;margin:0;padding:0;text-align:center;border:1px solid #ddd">');
+				<% }else{ %>
+					html.push(row.sort);
+				<% } %>
+				return html.join('');
+			}},
+		{header:'模式', name:'isShow', width:50, fixed:true, align:"center", formatter: function(val, obj, row, act){
+				return val=="1"?"个人":"团队";
+			}},
+		{header:'操作', name:'actions', width:100, sortable:false, title:false, align:"center",formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('sx:sxDailyJob:edit')){ %>
+				actions.push('<a href="/sx/sxDailyJob/form?id='+row.id+'" class="btnList" title="修改实训攻略"><i class="fa fa-pencil"></i></a>');
+				actions.push('<a href="${ctx}/sx/sxDailyJob/delete?id='+row.id+'" class="btnList" title="删除实训攻略" data-confirm="要删除该实训攻略及所有子实训攻略吗？"><i class="fa fa-trash-o"></i></a>');
+				actions.push('<a href="/sx/sxDailyJob/form?parentId='+row.id+'" class="btnList" title="添加下级实训攻略"><i class="fa fa-plus-square"></i></a>');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	treeGrid: true,
+	defaultExpandLevel: 0,
+	expandNodeClearPostData: 'name',
+	treeIcons : {
+		plus: "ui-icon-circlesmall-plus",
+		minus: "ui-icon-circlesmall-minus",
+		leaf : "ui-icon-document"
+	},
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+
+	}
+});
+
+//绑定更新排序按钮
+$('#btnUpdateSort').click(function(){
+	js.ajaxSubmitForm($("#dataGridForm"), function(data){
+		if(data.result == "true"){
+			$('#btnRefreshTree').click();
+		}
+		js.showMessage(data.message);
+	});
+});
+console.log("Hello 小伙伴 ~");
+console.log("哇, 你发现了一条秘密菜单 🤪");
+console.log("你要获取彩蛋加分, 想办法解密: bGlucHFAZ29rdGVjaC5jbg==");
+</script>

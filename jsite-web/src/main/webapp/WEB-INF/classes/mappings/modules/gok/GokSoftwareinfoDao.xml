@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.GokSoftwareinfoDao">
+    
+	<sql id="gokSoftwareinfoColumns">
+				a.id AS "id",
+		a.ruanjianmingcheng AS "ruanjianmingcheng",
+		a.ruanjianleixing AS "ruanjianleixing",
+		a.weihuren AS "weihuren",
+		a.waibudizhi AS "waibudizhi",
+		a.neibudizhi AS "neibudizhi",
+		a.fuwuqidizhi AS "fuwuqidizhi",
+		a.zhanghao AS "zhanghao",
+		a.mima AS "mima",
+		a.xiangmuyongtu AS "xiangmuyongtu",
+		a.xiangmujiafang AS "xiangmujiafang",
+		a.cunyouyuanma AS "cunyouyuanma",
+		a.kuozhan1 AS "kuozhan1",
+		a.kuozhan2 AS "kuozhan2",
+		a.kuozhan3 AS "kuozhan3",
+		a.kuozhan4 AS "kuozhan4",
+		a.xiangmuguishu AS "xiangmuguishu",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gokSoftwareinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="GokSoftwareinfo">
+		SELECT 
+			<include refid="gokSoftwareinfoColumns"/>
+		FROM gok_softwareinfo a
+		<include refid="gokSoftwareinfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokSoftwareinfo">
+		SELECT 
+			<include refid="gokSoftwareinfoColumns"/>
+		FROM gok_softwareinfo a
+		<include refid="gokSoftwareinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ruanjianmingcheng != null and ruanjianmingcheng != ''">
+				AND a.ruanjianmingcheng = #{ruanjianmingcheng}
+			</if>
+			<if test="ruanjianleixing != null and ruanjianleixing != ''">
+				AND a.ruanjianleixing = #{ruanjianleixing}
+			</if>
+			<if test="xiangmujiafang != null and xiangmujiafang != ''">
+				AND a.xiangmujiafang = #{xiangmujiafang}
+			</if>
+			<if test="cunyouyuanma != null and cunyouyuanma != ''">
+				AND a.cunyouyuanma = #{cunyouyuanma}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokSoftwareinfo">
+		SELECT 
+			<include refid="gokSoftwareinfoColumns"/>
+		FROM gok_softwareinfo a
+		<include refid="gokSoftwareinfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_softwareinfo(
+			id,
+			ruanjianmingcheng,
+			ruanjianleixing,
+			weihuren,
+			waibudizhi,
+			neibudizhi,
+			fuwuqidizhi,
+			zhanghao,
+			mima,
+			xiangmuyongtu,
+			xiangmujiafang,
+			cunyouyuanma,
+			kuozhan1,
+			kuozhan2,
+			kuozhan3,
+			kuozhan4,
+			xiangmuguishu,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{ruanjianmingcheng},
+			#{ruanjianleixing},
+			#{weihuren},
+			#{waibudizhi},
+			#{neibudizhi},
+			#{fuwuqidizhi},
+			#{zhanghao},
+			#{mima},
+			#{xiangmuyongtu},
+			#{xiangmujiafang},
+			#{cunyouyuanma},
+			#{kuozhan1},
+			#{kuozhan2},
+			#{kuozhan3},
+			#{kuozhan4},
+			#{xiangmuguishu},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_softwareinfo SET 	
+			ruanjianmingcheng = #{ruanjianmingcheng},
+			ruanjianleixing = #{ruanjianleixing},
+			weihuren = #{weihuren},
+			waibudizhi = #{waibudizhi},
+			neibudizhi = #{neibudizhi},
+			fuwuqidizhi = #{fuwuqidizhi},
+			zhanghao = #{zhanghao},
+			mima = #{mima},
+			xiangmuyongtu = #{xiangmuyongtu},
+			xiangmujiafang = #{xiangmujiafang},
+			cunyouyuanma = #{cunyouyuanma},
+			kuozhan1 = #{kuozhan1},
+			kuozhan2 = #{kuozhan2},
+			kuozhan3 = #{kuozhan3},
+			kuozhan4 = #{kuozhan4},
+			xiangmuguishu = #{xiangmuguishu},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_softwareinfo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

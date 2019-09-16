@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.DiancanDao">
+    
+	<sql id="diancanColumns">
+				a.id AS "id",
+		a.yonghuming AS "yonghuming",
+		a.shoujihao AS "shoujihao",
+		a.bumen AS "bumen",
+		a.yunxingzhi AS "yunxingzhi",
+		a.zaocan AS "zaocan",
+		a.wucan AS "wucan",
+		a.wancan AS "wancan",
+		a.yexiao AS "yexiao",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="diancanJoins">
+	</sql>
+    
+	<select id="get" resultType="Diancan">
+		SELECT 
+			<include refid="diancanColumns"/>
+		FROM diancan a
+		<include refid="diancanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Diancan">
+		SELECT 
+			<include refid="diancanColumns"/>
+		FROM diancan a
+		<include refid="diancanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="yonghuming != null and yonghuming != ''">
+				AND a.yonghuming = #{yonghuming}
+			</if>
+			<if test="shoujihao != null and shoujihao != ''">
+				AND a.shoujihao = #{shoujihao}
+			</if>
+			<if test="bumen != null and bumen != ''">
+				AND a.bumen = #{bumen}
+			</if>
+			<if test="yunxingzhi != null and yunxingzhi != ''">
+				AND a.yunxingzhi = #{yunxingzhi}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Diancan">
+		SELECT 
+			<include refid="diancanColumns"/>
+		FROM diancan a
+		<include refid="diancanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO diancan(
+			id,
+			yonghuming,
+			shoujihao,
+			bumen,
+			yunxingzhi,
+			zaocan,
+			wucan,
+			wancan,
+			yexiao,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{yonghuming},
+			#{shoujihao},
+			#{bumen},
+			#{yunxingzhi},
+			#{zaocan},
+			#{wucan},
+			#{wancan},
+			#{yexiao},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE diancan SET 	
+			yonghuming = #{yonghuming},
+			shoujihao = #{shoujihao},
+			bumen = #{bumen},
+			yunxingzhi = #{yunxingzhi},
+			zaocan = #{zaocan},
+			wucan = #{wucan},
+			wancan = #{wancan},
+			yexiao = #{yexiao},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE diancan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

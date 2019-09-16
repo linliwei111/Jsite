@@ -1,0 +1,212 @@
+<% layout('/layout/default.html', {title: '财务发票记录详情', libs: ['validate', 'icheck']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-pencil-square-o"></i> ${gokFapiaoCaiwu.isNewRecord?'新增财务发票记录':'编辑财务发票记录'}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${gokFapiaoCaiwu}" action="${ctx}/gok/gokFapiaoCaiwu/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<#form:hidden path="id"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 序号：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="xuhao"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 日期：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="riqi"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 区域：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="quyu" name="label" data="getDictList:quyu" class="form-control  " />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 报销人：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="baoxiaoren"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 报销人部门：
+							</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="baoxiaorenbumenId" name="baoxiaorenbumen.id" value="${gokFapiaoCaiwu.baoxiaorenbumen.id!}" labelName="baoxiaorenbumen.name"
+										labelValue="${gokFapiaoCaiwu.baoxiaorenbumen.name!}" title="部门" url="/sys/office/treeData?type=2" cssClass="" notAllowSelectParent="true" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 替票类别：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="tipiaoleibie" name="label" data="getDictList:baoxiaoleibie" class="form-control  " />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 替票金额：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="tipiaojine"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 费用明细：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="feiyongmingxi"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 实际金额明细：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="shijijinemingxi"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 实际报销类别：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="shijibaoxiaoleibie" name="label" data="getDictList:baoxiaoleibie" class="form-control  " />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 费用归属部门：
+							</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="feiyongguishubumenId" name="feiyongguishubumen.id" value="${gokFapiaoCaiwu.feiyongguishubumen.id!}" labelName="feiyongguishubumen.name"
+										labelValue="${gokFapiaoCaiwu.feiyongguishubumen.name!}" title="部门" url="/sys/office/treeData?type=2" cssClass="" notAllowSelectParent="true" />
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								项目归属：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="xiangmuguishu"  maxlength="64" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								借款：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="jiekuan"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 发票类型：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="fapiaoleixing" name="label" data="getDictList:fapiaoleixing" class="form-control  " />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 备注信息：
+							</label>
+							<div class="col-sm-8">
+								<#form:textarea path="remarks" rows="4"  maxlength="255" class="form-control input-xxlarge "/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('gok:gokFapiaoCaiwu:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> 保 存</button>
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="window.parent.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+
+<script type="text/javascript">
+	$("#inputForm").validate({
+		submitHandler: function(form){
+			js.ajaxSubmitForm($(form), function(data){
+				js.showMessage(data.message);
+				if(data.result == 'true'){
+					window.parent.closeCurrentTabPage(window.parent.refreshTab);
+				}
+			});
+	    }
+	});
+</script>

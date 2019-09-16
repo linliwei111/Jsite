@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.GokFapiaoCaiwuDao">
+    
+	<sql id="gokFapiaoCaiwuColumns">
+				a.id AS "id",
+					a.xiangmuguishu AS "xiangmuguishu",
+		a.xuhao AS "xuhao",
+		a.riqi AS "riqi",
+		a.quyu AS "quyu",
+		a.baoxiaoren AS "baoxiaoren",
+		a.baoxiaorenbumen AS "baoxiaorenbumen.id",
+		a.tipiaoleibie AS "tipiaoleibie",
+		a.tipiaojine AS "tipiaojine",
+		a.feiyongmingxi AS "feiyongmingxi",
+		a.shijijinemingxi AS "shijijinemingxi",
+		a.shijibaoxiaoleibie AS "shijibaoxiaoleibie",
+		a.feiyongguishubumen AS "feiyongguishubumen.id",
+		a.jiekuan AS "jiekuan",
+		a.fapiaoleixing AS "fapiaoleixing",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o6.name AS "baoxiaorenbumen.name",
+		o12.name AS "feiyongguishubumen.name"
+	</sql>
+	
+	<sql id="gokFapiaoCaiwuJoins">
+		LEFT JOIN sys_office o6 ON o6.id = a.baoxiaorenbumen
+		LEFT JOIN sys_office o12 ON o12.id = a.feiyongguishubumen
+	</sql>
+    
+	<select id="get" resultType="GokFapiaoCaiwu">
+		SELECT 
+			<include refid="gokFapiaoCaiwuColumns"/>
+		FROM gok_fapiao_caiwu a
+		<include refid="gokFapiaoCaiwuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findMaxXuhao" resultType="String">
+		SELECT
+			MAX(a.xuhao)
+		FROM gok_fapiao_caiwu a
+	</select>
+
+	<select id="findList" resultType="GokFapiaoCaiwu">
+		SELECT 
+			<include refid="gokFapiaoCaiwuColumns"/>
+		FROM gok_fapiao_caiwu a
+		<include refid="gokFapiaoCaiwuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="riqi != null and riqi != ''">
+				AND a.riqi = #{riqi}
+			</if>
+			<if test="quyu != null and quyu != ''">
+				AND a.quyu = #{quyu}
+			</if>
+			<if test="baoxiaoren != null and baoxiaoren != ''">
+				AND a.baoxiaoren = #{baoxiaoren}
+			</if>
+			<if test="baoxiaorenbumen != null and baoxiaorenbumen.id != null and baoxiaorenbumen.id != ''">
+				AND a.baoxiaorenbumen = #{baoxiaorenbumen.id}
+			</if>
+			<if test="tipiaoleibie != null and tipiaoleibie != ''">
+				AND a.tipiaoleibie = #{tipiaoleibie}
+			</if>
+			<if test="shijibaoxiaoleibie != null and shijibaoxiaoleibie != ''">
+				AND a.shijibaoxiaoleibie = #{shijibaoxiaoleibie}
+			</if>
+			<if test="feiyongguishubumen != null and feiyongguishubumen.id != null and feiyongguishubumen.id != ''">
+				AND a.feiyongguishubumen = #{feiyongguishubumen.id}
+			</if>
+			<if test="fapiaoleixing != null and fapiaoleixing != ''">
+				AND a.fapiaoleixing = #{fapiaoleixing}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokFapiaoCaiwu">
+		SELECT 
+			<include refid="gokFapiaoCaiwuColumns"/>
+		FROM gok_fapiao_caiwu a
+		<include refid="gokFapiaoCaiwuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_fapiao_caiwu(
+			id,
+			xuhao,
+			xiangmuguishu,
+			riqi,
+			quyu,
+			baoxiaoren,
+			baoxiaorenbumen,
+			tipiaoleibie,
+			tipiaojine,
+			feiyongmingxi,
+			shijijinemingxi,
+			shijibaoxiaoleibie,
+			feiyongguishubumen,
+			jiekuan,
+			fapiaoleixing,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{xuhao},
+			#{xiangmuguishu},
+			#{riqi},
+			#{quyu},
+			#{baoxiaoren},
+			#{baoxiaorenbumen.id},
+			#{tipiaoleibie},
+			#{tipiaojine},
+			#{feiyongmingxi},
+			#{shijijinemingxi},
+			#{shijibaoxiaoleibie},
+			#{feiyongguishubumen.id},
+			#{jiekuan},
+			#{fapiaoleixing},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_fapiao_caiwu SET 	
+			xuhao = #{xuhao},
+			riqi = #{riqi},
+			quyu = #{quyu},
+			xiangmuguishu = #{xiangmuguishu},
+			baoxiaoren = #{baoxiaoren},
+			baoxiaorenbumen = #{baoxiaorenbumen.id},
+			tipiaoleibie = #{tipiaoleibie},
+			tipiaojine = #{tipiaojine},
+			feiyongmingxi = #{feiyongmingxi},
+			shijijinemingxi = #{shijijinemingxi},
+			shijibaoxiaoleibie = #{shijibaoxiaoleibie},
+			feiyongguishubumen = #{feiyongguishubumen.id},
+			jiekuan = #{jiekuan},
+			fapiaoleixing = #{fapiaoleixing},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_fapiao_caiwu SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

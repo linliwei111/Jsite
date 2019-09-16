@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.NenglibiaoqianDao">
+    
+	<sql id="nenglibiaoqianColumns">
+				a.id AS "id",
+		a.bumen AS "bumen.id",
+		a.xingming AS "xingming",
+		a.dianhua AS "dianhua",
+		a.jinengbiaoqian1 AS "jinengbiaoqian1",
+		a.biaoqiandengji1 AS "biaoqiandengji1",
+		a.biaoqianbeizhu1 AS "biaoqianbeizhu1",
+		a.jinengbiaoqian2 AS "jinengbiaoqian2",
+		a.biaoqiandengji2 AS "biaoqiandengji2",
+		a.biaoqianbeizhu2 AS "biaoqianbeizhu2",
+		a.jinengbiaoqian3 AS "jinengbiaoqian3",
+		a.biaoqiandengji3 AS "biaoqiandengji3",
+		a.biaoqianbeizhu3 AS "biaoqianbeizhu3",
+		a.jinengbiaoqian4 AS "jinengbiaoqian4",
+		a.biaoqiandengji4 AS "biaoqiandengji4",
+		a.biaoqianbeizhu4 AS "biaoqianbeizhu4",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o2.name AS "bumen.name"
+	</sql>
+	
+	<sql id="nenglibiaoqianJoins">
+		LEFT JOIN sys_office o2 ON o2.id = a.bumen
+	</sql>
+    
+	<select id="get" resultType="Nenglibiaoqian">
+		SELECT 
+			<include refid="nenglibiaoqianColumns"/>
+		FROM nenglibiaoqian a
+		<include refid="nenglibiaoqianJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Nenglibiaoqian">
+		SELECT 
+			<include refid="nenglibiaoqianColumns"/>
+		FROM nenglibiaoqian a
+		<include refid="nenglibiaoqianJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="bumen != null and bumen.id != null and bumen.id != ''">
+				AND a.bumen = #{bumen.id}
+			</if>
+			<if test="xingming != null and xingming != ''">
+				AND a.xingming = #{xingming}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Nenglibiaoqian">
+		SELECT 
+			<include refid="nenglibiaoqianColumns"/>
+		FROM nenglibiaoqian a
+		<include refid="nenglibiaoqianJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO nenglibiaoqian(
+			id,
+			bumen,
+			xingming,
+			dianhua,
+			jinengbiaoqian1,
+			biaoqiandengji1,
+			biaoqianbeizhu1,
+			jinengbiaoqian2,
+			biaoqiandengji2,
+			biaoqianbeizhu2,
+			jinengbiaoqian3,
+			biaoqiandengji3,
+			biaoqianbeizhu3,
+			jinengbiaoqian4,
+			biaoqiandengji4,
+			biaoqianbeizhu4,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{bumen.id},
+			#{xingming},
+			#{dianhua},
+			#{jinengbiaoqian1},
+			#{biaoqiandengji1},
+			#{biaoqianbeizhu1},
+			#{jinengbiaoqian2},
+			#{biaoqiandengji2},
+			#{biaoqianbeizhu2},
+			#{jinengbiaoqian3},
+			#{biaoqiandengji3},
+			#{biaoqianbeizhu3},
+			#{jinengbiaoqian4},
+			#{biaoqiandengji4},
+			#{biaoqianbeizhu4},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE nenglibiaoqian SET 	
+			bumen = #{bumen.id},
+			xingming = #{xingming},
+			dianhua = #{dianhua},
+			jinengbiaoqian1 = #{jinengbiaoqian1},
+			biaoqiandengji1 = #{biaoqiandengji1},
+			biaoqianbeizhu1 = #{biaoqianbeizhu1},
+			jinengbiaoqian2 = #{jinengbiaoqian2},
+			biaoqiandengji2 = #{biaoqiandengji2},
+			biaoqianbeizhu2 = #{biaoqianbeizhu2},
+			jinengbiaoqian3 = #{jinengbiaoqian3},
+			biaoqiandengji3 = #{biaoqiandengji3},
+			biaoqianbeizhu3 = #{biaoqianbeizhu3},
+			jinengbiaoqian4 = #{jinengbiaoqian4},
+			biaoqiandengji4 = #{biaoqiandengji4},
+			biaoqianbeizhu4 = #{biaoqianbeizhu4},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE nenglibiaoqian SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

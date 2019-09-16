@@ -1,0 +1,189 @@
+<% layout('/layout/default.html', {title: '实训流程详情', libs: ['validate', 'icheck']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-pencil-square-o"></i> ${sxDailyProc.isNewRecord?'新增实训流程':'编辑实训流程'}
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${sxDailyProc}" action="${ctx}/sx/sxDailyProc/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<#form:hidden path="id"/>
+				<div class="row">
+				    <div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">父级：</label>
+							<div class="col-sm-8">
+							    <div class="form-control" readonly="readonly">
+									<#form:hidden path="parent.id"/>
+									<% if(isEmpty(sxDailyProc.parent.id)|| sxDailyProc.parent.id == "0") {%>
+										根区域
+									<% } else{ %>
+										${sxDailyProc.parent.name}
+									<% } %>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							<span class="required hide">*</span> 名称：<i class="fa icon-question hide"></i>
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="name"  maxlength="100" class="form-control required  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							<span class="required hide">*</span> 排序：<i class="fa icon-question hide"></i>
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="sort"  class="form-control required  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 链接：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="href"  maxlength="2000" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 目标：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="target"  maxlength="20" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 图标：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="icon"  maxlength="100" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							<span class="required hide">*</span> 显示：<i class="fa icon-question hide"></i>
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="isShow"  maxlength="1" class="form-control required  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 权限标识：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="permission"  maxlength="200" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 备注信息：
+							</label>
+							<div class="col-sm-8">
+								<#form:textarea path="remarks" rows="4"  maxlength="255" class="form-control input-xxlarge "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 参与角色：
+							</label>
+							<div class="col-sm-8">
+								<#form:select path="roleName" name="label" data="getDictList:role_name" class="form-control  " />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 工作内容：
+							</label>
+							<div class="col-sm-8">
+								<#form:textarea path="job" rows="4"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 参考文件：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="refDoc"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 参与时间：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="joinTime"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('sx:sxDailyProc:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> 保 存</button>
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="window.parent.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+
+<script type="text/javascript">
+	$("#inputForm").validate({
+		submitHandler: function(form){
+			js.ajaxSubmitForm($(form), function(data){
+				js.showMessage(data.message);
+				if(data.result == 'true'){
+					window.parent.closeCurrentTabPage(window.parent.refreshTab);
+				}
+			});
+	    }
+	});
+</script>

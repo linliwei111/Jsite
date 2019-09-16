@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.util.dao.UtilJiekouDao">
+    
+	<sql id="utilJiekouColumns">
+				a.id AS "id",
+		a.jiekoumingcheng AS "jiekoumingcheng",
+		a.jiekouleixing AS "jiekouleixing",
+		a.qingqiuurl AS "qingqiuurl",
+		a.qingqiubody AS "qingqiubody",
+		a.chenggongshifanhuixiaoxi AS "chenggongshifanhuixiaoxi",
+		a.shibaishifanhuixiaoxi AS "shibaishifanhuixiaoxi",
+		a.beizhuxinxi AS "beizhuxinxi",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="utilJiekouJoins">
+	</sql>
+    
+	<select id="get" resultType="UtilJiekou">
+		SELECT 
+			<include refid="utilJiekouColumns"/>
+		FROM util_jiekou a
+		<include refid="utilJiekouJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UtilJiekou">
+		SELECT 
+			<include refid="utilJiekouColumns"/>
+		FROM util_jiekou a
+		<include refid="utilJiekouJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="jiekoumingcheng != null and jiekoumingcheng != ''">
+				AND a.jiekoumingcheng = #{jiekoumingcheng}
+			</if>
+			<if test="jiekouleixing != null and jiekouleixing != ''">
+				AND a.jiekouleixing = #{jiekouleixing}
+			</if>
+			<if test="qingqiubody != null and qingqiubody != ''">
+				AND a.qingqiubody = #{qingqiubody}
+			</if>
+			<if test="chenggongshifanhuixiaoxi != null and chenggongshifanhuixiaoxi != ''">
+				AND a.chenggongshifanhuixiaoxi = #{chenggongshifanhuixiaoxi}
+			</if>
+			<if test="shibaishifanhuixiaoxi != null and shibaishifanhuixiaoxi != ''">
+				AND a.shibaishifanhuixiaoxi = #{shibaishifanhuixiaoxi}
+			</if>
+			<if test="beizhuxinxi != null and beizhuxinxi != ''">
+				AND a.beizhuxinxi = #{beizhuxinxi}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UtilJiekou">
+		SELECT 
+			<include refid="utilJiekouColumns"/>
+		FROM util_jiekou a
+		<include refid="utilJiekouJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO util_jiekou(
+			id,
+			jiekoumingcheng,
+			jiekouleixing,
+			qingqiuurl,
+			qingqiubody,
+			chenggongshifanhuixiaoxi,
+			shibaishifanhuixiaoxi,
+			beizhuxinxi,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{jiekoumingcheng},
+			#{jiekouleixing},
+			#{qingqiuurl},
+			#{qingqiubody},
+			#{chenggongshifanhuixiaoxi},
+			#{shibaishifanhuixiaoxi},
+			#{beizhuxinxi},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE util_jiekou SET 	
+			jiekoumingcheng = #{jiekoumingcheng},
+			jiekouleixing = #{jiekouleixing},
+			qingqiuurl = #{qingqiuurl},
+			qingqiubody = #{qingqiubody},
+			chenggongshifanhuixiaoxi = #{chenggongshifanhuixiaoxi},
+			shibaishifanhuixiaoxi = #{shibaishifanhuixiaoxi},
+			beizhuxinxi = #{beizhuxinxi},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE util_jiekou SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.GokHrmianshiDao">
+    
+	<sql id="gokHrmianshiColumns">
+				a.id AS "id",
+		a.goutongshijian AS "goutongshijian",
+		a.xingming AS "xingming",
+		a.xueli AS "xueli",
+		a.biyeyuanxiao AS "biyeyuanxiao",
+		a.zhuanye AS "zhuanye",
+		a.biyeshijian AS "biyeshijian",
+		a.gongzuonianxian AS "gongzuonianxian",
+		a.qiuzhigangwei AS "qiuzhigangwei",
+		a.xinziyaoqiu AS "xinziyaoqiu",
+		a.lianxifangshi AS "lianxifangshi",
+		a.dangqianzhuangtai AS "dangqianzhuangtai",
+		a.qitayaoqiu AS "qitayaoqiu",
+		a.shifoujieshouzhudian AS "shifoujieshouzhudian",
+		a.kezhudianquyu AS "kezhudianquyu",
+		a.yaoyueqingkuang AS "yaoyueqingkuang",
+		a.tuijianqiye AS "tuijianqiye",
+		a.yujidaogangshijian AS "yujidaogangshijian",
+		a.mianshijieguo AS "mianshijieguo",
+		a.qitashuoming AS "qitashuoming",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gokHrmianshiJoins">
+	</sql>
+    
+	<select id="get" resultType="GokHrmianshi">
+		SELECT 
+			<include refid="gokHrmianshiColumns"/>
+		FROM gok_hrmianshi a
+		<include refid="gokHrmianshiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokHrmianshi">
+		SELECT 
+			<include refid="gokHrmianshiColumns"/>
+		FROM gok_hrmianshi a
+		<include refid="gokHrmianshiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="goutongshijian != null and goutongshijian != ''">
+				AND a.goutongshijian = #{goutongshijian}
+			</if>
+			<if test="xingming != null and xingming != ''">
+				AND a.xingming = #{xingming}
+			</if>
+			<if test="xueli != null and xueli != ''">
+				AND a.xueli = #{xueli}
+			</if>
+			<if test="biyeyuanxiao != null and biyeyuanxiao != ''">
+				AND a.biyeyuanxiao = #{biyeyuanxiao}
+			</if>
+			<if test="zhuanye != null and zhuanye != ''">
+				AND a.zhuanye = #{zhuanye}
+			</if>
+			<if test="biyeshijian != null and biyeshijian != ''">
+				AND a.biyeshijian = #{biyeshijian}
+			</if>
+			<if test="gongzuonianxian != null and gongzuonianxian != ''">
+				AND a.gongzuonianxian = #{gongzuonianxian}
+			</if>
+			<if test="qiuzhigangwei != null and qiuzhigangwei != ''">
+				AND a.qiuzhigangwei = #{qiuzhigangwei}
+			</if>
+			<if test="dangqianzhuangtai != null and dangqianzhuangtai != ''">
+				AND a.dangqianzhuangtai = #{dangqianzhuangtai}
+			</if>
+			<if test="shifoujieshouzhudian != null and shifoujieshouzhudian != ''">
+				AND a.shifoujieshouzhudian = #{shifoujieshouzhudian}
+			</if>
+			<if test="mianshijieguo != null and mianshijieguo != ''">
+				AND a.mianshijieguo = #{mianshijieguo}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokHrmianshi">
+		SELECT 
+			<include refid="gokHrmianshiColumns"/>
+		FROM gok_hrmianshi a
+		<include refid="gokHrmianshiJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_hrmianshi(
+			id,
+			goutongshijian,
+			xingming,
+			xueli,
+			biyeyuanxiao,
+			zhuanye,
+			biyeshijian,
+			gongzuonianxian,
+			qiuzhigangwei,
+			xinziyaoqiu,
+			lianxifangshi,
+			dangqianzhuangtai,
+			qitayaoqiu,
+			shifoujieshouzhudian,
+			kezhudianquyu,
+			yaoyueqingkuang,
+			tuijianqiye,
+			yujidaogangshijian,
+			mianshijieguo,
+			qitashuoming,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{goutongshijian},
+			#{xingming},
+			#{xueli},
+			#{biyeyuanxiao},
+			#{zhuanye},
+			#{biyeshijian},
+			#{gongzuonianxian},
+			#{qiuzhigangwei},
+			#{xinziyaoqiu},
+			#{lianxifangshi},
+			#{dangqianzhuangtai},
+			#{qitayaoqiu},
+			#{shifoujieshouzhudian},
+			#{kezhudianquyu},
+			#{yaoyueqingkuang},
+			#{tuijianqiye},
+			#{yujidaogangshijian},
+			#{mianshijieguo},
+			#{qitashuoming},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_hrmianshi SET 	
+			goutongshijian = #{goutongshijian},
+			xingming = #{xingming},
+			xueli = #{xueli},
+			biyeyuanxiao = #{biyeyuanxiao},
+			zhuanye = #{zhuanye},
+			biyeshijian = #{biyeshijian},
+			gongzuonianxian = #{gongzuonianxian},
+			qiuzhigangwei = #{qiuzhigangwei},
+			xinziyaoqiu = #{xinziyaoqiu},
+			lianxifangshi = #{lianxifangshi},
+			dangqianzhuangtai = #{dangqianzhuangtai},
+			qitayaoqiu = #{qitayaoqiu},
+			shifoujieshouzhudian = #{shifoujieshouzhudian},
+			kezhudianquyu = #{kezhudianquyu},
+			yaoyueqingkuang = #{yaoyueqingkuang},
+			tuijianqiye = #{tuijianqiye},
+			yujidaogangshijian = #{yujidaogangshijian},
+			mianshijieguo = #{mianshijieguo},
+			qitashuoming = #{qitashuoming},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_hrmianshi SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

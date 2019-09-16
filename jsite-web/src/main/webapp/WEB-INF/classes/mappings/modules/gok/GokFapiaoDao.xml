@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.GokFapiaoDao">
+    
+	<sql id="gokFapiaoColumns">
+				a.id AS "id",
+		a.baoxiaoren AS "baoxiaoren",
+		a.baoxiaoshijian AS "baoxiaoshijian",
+		a.fapiaodaima AS "fapiaodaima",
+		a.fapiaohaoma AS "fapiaohaoma",
+		a.baoxiaojine AS "baoxiaojine",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gokFapiaoJoins">
+	</sql>
+    
+	<select id="get" resultType="GokFapiao">
+		SELECT 
+			<include refid="gokFapiaoColumns"/>
+		FROM gok_fapiao a
+		<include refid="gokFapiaoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokFapiao">
+		SELECT 
+			<include refid="gokFapiaoColumns"/>
+		FROM gok_fapiao a
+		<include refid="gokFapiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="baoxiaoren != null and baoxiaoren != ''">
+				AND a.baoxiaoren = #{baoxiaoren}
+			</if>
+			<if test="baoxiaoshijian != null and baoxiaoshijian != ''">
+				AND a.baoxiaoshijian = #{baoxiaoshijian}
+			</if>
+			<if test="fapiaodaima != null and fapiaodaima != ''">
+				AND a.fapiaodaima = #{fapiaodaima}
+			</if>
+			<if test="fapiaohaoma != null and fapiaohaoma != ''">
+				AND a.fapiaohaoma = #{fapiaohaoma}
+			</if>
+			<if test="baoxiaojine != null and baoxiaojine != ''">
+				AND a.baoxiaojine = #{baoxiaojine}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokFapiao">
+		SELECT 
+			<include refid="gokFapiaoColumns"/>
+		FROM gok_fapiao a
+		<include refid="gokFapiaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_fapiao(
+			id,
+			baoxiaoren,
+			baoxiaoshijian,
+			fapiaodaima,
+			fapiaohaoma,
+			baoxiaojine,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{baoxiaoren},
+			#{baoxiaoshijian},
+			#{fapiaodaima},
+			#{fapiaohaoma},
+			#{baoxiaojine},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_fapiao SET 	
+			baoxiaoren = #{baoxiaoren},
+			baoxiaoshijian = #{baoxiaoshijian},
+			fapiaodaima = #{fapiaodaima},
+			fapiaohaoma = #{fapiaohaoma},
+			baoxiaojine = #{baoxiaojine},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM  gok_fapiao WHERE id = #{id}
+	</update>
+	
+</mapper>

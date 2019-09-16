@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.baoxiao.dao.GokDataDao">
+    
+	<sql id="gokDataColumns">
+				a.id AS "id",
+		a.xiangmuguishu AS "xiangmuguishu",
+		a.baoxiaoshijian AS "baoxiaoshijian",
+		a.baoxiaoren AS "baoxiaoren",
+		a.zhaiyao AS "zhaiyao",
+		a.baoxiaoleibie AS "baoxiaoleibie",
+		a.baoxiaojine AS "baoxiaojine",
+		a.beizhu AS "beizhu",
+		a.office_id AS "office.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o8.name AS "office.name"
+	</sql>
+	
+	<sql id="gokDataJoins">
+		LEFT JOIN sys_office o8 ON o8.id = a.office_id
+		LEFT JOIN sys_user u1 ON u1.id = a.create_by
+	</sql>
+    
+	<select id="get" resultType="GokData">
+		SELECT 
+			<include refid="gokDataColumns"/>
+		FROM gok_data a
+		<include refid="gokDataJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokData">
+		SELECT 
+			<include refid="gokDataColumns"/>
+		FROM gok_data a
+		<include refid="gokDataJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="baoxiaoshijian != null and baoxiaoshijian != ''">
+				AND a.baoxiaoshijian = #{baoxiaoshijian}
+			</if>
+			<if test="baoxiaoren != null and baoxiaoren != ''">
+				AND a.baoxiaoren = #{baoxiaoren}
+			</if>
+			<if test="zhaiyao != null and zhaiyao != ''">
+				AND a.zhaiyao = #{zhaiyao}
+			</if>
+			<if test="baoxiaoleibie != null and baoxiaoleibie != ''">
+				AND a.baoxiaoleibie = #{baoxiaoleibie}
+			</if>
+			<if test="baoxiaojine != null and baoxiaojine != ''">
+				AND a.baoxiaojine = #{baoxiaojine}
+			</if>
+			<!-- 数据范围过滤 -->
+			${sqlMap.dsf}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokData">
+		SELECT 
+			<include refid="gokDataColumns"/>
+		FROM gok_data a
+		<include refid="gokDataJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_data(
+			id,
+			xiangmuguishu,
+			baoxiaoshijian,
+			baoxiaoren,
+			zhaiyao,
+			baoxiaoleibie,
+			baoxiaojine,
+			beizhu,
+			office_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{xiangmuguishu},
+			#{baoxiaoshijian},
+			#{baoxiaoren},
+			#{zhaiyao},
+			#{baoxiaoleibie},
+			#{baoxiaojine},
+			#{beizhu},
+			#{office.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_data SET 	
+			xiangmuguishu = #{xiangmuguishu},
+			baoxiaoshijian = #{baoxiaoshijian},
+			baoxiaoren = #{baoxiaoren},
+			zhaiyao = #{zhaiyao},
+			baoxiaoleibie = #{baoxiaoleibie},
+			baoxiaojine = #{baoxiaojine},
+			beizhu = #{beizhu},
+			office_id = #{office.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_data SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

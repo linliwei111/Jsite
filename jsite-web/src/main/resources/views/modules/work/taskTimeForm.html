@@ -1,0 +1,179 @@
+<% layout('/layout/default.html', {title: '工时表详情', libs: ['validate', 'icheck']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-pencil-square-o"></i> ${taskTime.isNewRecord?'新增工时表':'编辑工时表'}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${taskTime}" action="${ctx}/work/taskTime/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<#form:hidden path="id"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 归属用户：
+							</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="userId" name="user.id" value="${taskTime.user.id!}" labelName="user.name"
+										labelValue="${taskTime.user.name!}" title="用户" url="/sys/office/treeData?type=3" cssClass="" notAllowSelectParent="true" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 归属部门：
+							</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="officeId" name="office.id" value="${taskTime.office.id!}" labelName="office.name"
+										labelValue="${taskTime.office.name!}" title="部门" url="/sys/office/treeData?type=2" cssClass="" notAllowSelectParent="true" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 归属区域：
+							</label>
+							<div class="col-sm-8">
+								<#form:treeselect id="areaId" name="area.id" value="${taskTime.area.id!}" labelName="area.name"
+										labelValue="${taskTime.area.name!}" title="区域" url="/sys/area/treeData" cssClass="" notAllowSelectParent="true" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期一：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="monday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期二：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="tuesday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期三：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="wednesday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期四：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="thursday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期五：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="friday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期六：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="saturday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 星期日：
+							</label>
+							<div class="col-sm-8">
+								<#form:input path="sunday"  maxlength="255" class="form-control  "/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 加入日期：
+							</label>
+							<div class="col-sm-8">
+								<input id="inDate" type="text" name="inDate" maxlength="20" readonly="readonly" class="form-control  "
+										value="${taskTime.inDate}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+							 备注信息：
+							</label>
+							<div class="col-sm-8">
+								<#form:textarea path="remarks" rows="4"  maxlength="255" class="form-control input-xxlarge "/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('work:taskTime:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> 保 存</button>
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="window.parent.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> 关 闭</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+
+<script type="text/javascript">
+	$("#inputForm").validate({
+		submitHandler: function(form){
+			js.ajaxSubmitForm($(form), function(data){
+				js.showMessage(data.message);
+				if(data.result == 'true'){
+					window.parent.closeCurrentTabPage(window.parent.refreshTab);
+				}
+			});
+	    }
+	});
+</script>

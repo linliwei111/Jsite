@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.gok.dao.GokStudentDao">
+    
+	<sql id="gokStudentColumns">
+				a.id AS "id",
+		a.xuhao AS "xuhao",
+		a.baomingshijian AS "baomingshijian",
+		a.xingming AS "xingming",
+		a.shenfenzheng AS "shenfenzheng",
+		a.xuexiao AS "xuexiao",
+		a.nianji AS "nianji",
+		a.zhuanye AS "zhuanye",
+		a.sushelou AS "sushelou",
+		a.shoujihaoma AS "shoujihaoma",
+		a.qq AS "qq",
+		a.xingbie AS "xingbie",
+		a.taocan AS "taocan",
+		a.shengri AS "shengri",
+		a.hujisuozaidi AS "hujisuozaidi",
+		a.shichangchengjiaorenyuan AS "shichangchengjiaorenyuan",
+		a.shifousongshu AS "shifousongshu",
+		a.lingshujilu AS "lingshujilu",
+		a.yishangkecheng AS "yishangkecheng",
+		a.zhengzaishangkecheng AS "zhengzaishangkecheng",
+		a.beizhu AS "beizhu",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gokStudentJoins">
+	</sql>
+    
+	<select id="get" resultType="GokStudent">
+		SELECT 
+			<include refid="gokStudentColumns"/>
+		FROM gok_student a
+		<include refid="gokStudentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GokStudent">
+		SELECT 
+			<include refid="gokStudentColumns"/>
+		FROM gok_student a
+		<include refid="gokStudentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="xingming != null and xingming != ''">
+				AND a.xingming = #{xingming}
+			</if>
+			<if test="shenfenzheng != null and shenfenzheng != ''">
+				AND a.shenfenzheng = #{shenfenzheng}
+			</if>
+			<if test="xuexiao != null and xuexiao != ''">
+				AND a.xuexiao = #{xuexiao}
+			</if>
+			<if test="nianji != null and nianji != ''">
+				AND a.nianji = #{nianji}
+			</if>
+			<if test="zhuanye != null and zhuanye != ''">
+				AND a.zhuanye = #{zhuanye}
+			</if>
+			<if test="sushelou != null and sushelou != ''">
+				AND a.sushelou = #{sushelou}
+			</if>
+			<if test="shoujihaoma != null and shoujihaoma != ''">
+				AND a.shoujihaoma = #{shoujihaoma}
+			</if>
+			<if test="qq != null and qq != ''">
+				AND a.qq = #{qq}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GokStudent">
+		SELECT 
+			<include refid="gokStudentColumns"/>
+		FROM gok_student a
+		<include refid="gokStudentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gok_student(
+			id,
+			xuhao,
+			baomingshijian,
+			xingming,
+			shenfenzheng,
+			xuexiao,
+			nianji,
+			zhuanye,
+			sushelou,
+			shoujihaoma,
+			qq,
+			xingbie,
+			taocan,
+			shengri,
+			hujisuozaidi,
+			shichangchengjiaorenyuan,
+			shifousongshu,
+			lingshujilu,
+			yishangkecheng,
+			zhengzaishangkecheng,
+			beizhu,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{xuhao},
+			#{baomingshijian},
+			#{xingming},
+			#{shenfenzheng},
+			#{xuexiao},
+			#{nianji},
+			#{zhuanye},
+			#{sushelou},
+			#{shoujihaoma},
+			#{qq},
+			#{xingbie},
+			#{taocan},
+			#{shengri},
+			#{hujisuozaidi},
+			#{shichangchengjiaorenyuan},
+			#{shifousongshu},
+			#{lingshujilu},
+			#{yishangkecheng},
+			#{zhengzaishangkecheng},
+			#{beizhu},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gok_student SET 	
+			xuhao = #{xuhao},
+			baomingshijian = #{baomingshijian},
+			xingming = #{xingming},
+			shenfenzheng = #{shenfenzheng},
+			xuexiao = #{xuexiao},
+			nianji = #{nianji},
+			zhuanye = #{zhuanye},
+			sushelou = #{sushelou},
+			shoujihaoma = #{shoujihaoma},
+			qq = #{qq},
+			xingbie = #{xingbie},
+			taocan = #{taocan},
+			shengri = #{shengri},
+			hujisuozaidi = #{hujisuozaidi},
+			shichangchengjiaorenyuan = #{shichangchengjiaorenyuan},
+			shifousongshu = #{shifousongshu},
+			lingshujilu = #{lingshujilu},
+			yishangkecheng = #{yishangkecheng},
+			zhengzaishangkecheng = #{zhengzaishangkecheng},
+			beizhu = #{beizhu},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gok_student SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

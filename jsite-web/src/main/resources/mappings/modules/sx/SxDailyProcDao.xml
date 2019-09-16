@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.modules.sx.dao.SxDailyProcDao">
+
+	<sql id="sxDailyProcColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.tree_leaf AS "treeLeaf",
+		a.tree_level AS "treeLevel",
+		a.href AS "href",
+		a.target AS "target",
+		a.icon AS "icon",
+		a.is_show AS "isShow",
+		a.permission AS "permission",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.role_name AS "roleName",
+		a.job AS "job",
+		a.ref_doc AS "refDoc",
+		a.join_time AS "joinTime",
+		a2.name AS "parent.name"
+	</sql>
+
+	<sql id="sxDailyProcJoins">
+		LEFT JOIN sx_daily_proc a2 ON a2.id = a.parent_id
+	</sql>
+
+	<select id="get" resultType="SxDailyProc">
+		SELECT
+			<include refid="sxDailyProcColumns"/>
+		FROM sx_daily_proc a
+		<include refid="sxDailyProcJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SxDailyProc">
+		SELECT
+			<include refid="sxDailyProcColumns"/>
+		FROM sx_daily_proc a
+		<include refid="sxDailyProcJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+
+	<select id="findAllList" resultType="SxDailyProc">
+		SELECT
+			<include refid="sxDailyProcColumns"/>
+		FROM sx_daily_proc a
+		<include refid="sxDailyProcJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+
+	<select id="findByParentIdsLike" resultType="SxDailyProc">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM sx_daily_proc a
+		<include refid="sxDailyProcJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sx_daily_proc(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			sort,
+			tree_leaf,
+			tree_level,
+			href,
+			target,
+			icon,
+			is_show,
+			permission,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			role_name,
+			job,
+			ref_doc,
+			join_time
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{sort},
+			#{treeLeaf},
+			#{treeLevel},
+			#{href},
+			#{target},
+			#{icon},
+			#{isShow},
+			#{permission},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{roleName},
+			#{job},
+			#{refDoc},
+			#{joinTime}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sx_daily_proc SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			sort = #{sort},
+			tree_leaf = #{treeLeaf},
+			tree_level = #{treeLevel},
+			href = #{href},
+			target = #{target},
+			icon = #{icon},
+			is_show = #{isShow},
+			permission = #{permission},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			role_name = #{roleName},
+			job = #{job},
+			ref_doc = #{refDoc},
+			join_time = #{joinTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE sx_daily_proc SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sx_daily_proc SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+		<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+		<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+		<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+	</update>
+
+</mapper>
